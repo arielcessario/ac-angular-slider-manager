@@ -343,13 +343,12 @@
             controller: function ($scope) {
 
                 var vm = this;
-
-
+                vm.conProductos = $scope.conProductos;
                 sliderSelector.ctrl($scope);
 
             },
             link: function (scope) {
-                console.log('entra');
+                //conProductos = scope.conProductos;
 
 
             },
