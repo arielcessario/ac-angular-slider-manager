@@ -342,7 +342,7 @@
                 conProductos: '='
             },
             templateUrl: currentScriptPath.replace('.js', '.html'),
-            controller: function ($scope, $compile, $http) {
+            controller: function ($scope, $compile, $http, servicio) {
 
                 var vm = this;
 
