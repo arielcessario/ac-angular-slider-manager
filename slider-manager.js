@@ -345,7 +345,6 @@
             controller: function ($scope, $compile, $http) {
 
                 var vm = this;
-                servicio.flag = true;
 
                 servicio.ctrl();
 
@@ -426,11 +425,11 @@
     }
 
 
-    Servicio.$inject = ['$injector'];
-    function Servicio($injector) {
-        this.flag = false;
+    Servicio.$inject = ['$injector', '$scope'];
+    function Servicio($injector, $scope) {
 
-        if (this.flag) {
+
+        if ($scope.conProductos) {
             return $injector.get('sliderProductos');
         } else {
             return $injector.get('slider');
