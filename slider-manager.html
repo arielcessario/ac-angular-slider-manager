@@ -8,8 +8,8 @@
     <h1>Administrar Slider</h1>
 </div>
 <div class="v-spacer"></div>
-<div ng-controller="SliderController  as sliderCtrl"
-     name="productForm">
+<div
+        name="productForm">
     <div><h1 style="margin-bottom: 20px; border: solid 0px; border-bottom-width: 1px; border-bottom-color: rgba(200,200,200, 0.5);">Slider
         1</h1><br/>
 
@@ -17,7 +17,7 @@
             <div class="form-flex">
 
                 <div>
-                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.oferta_01.titulo"
+                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.slider_01.titulo"
                            ng-maxlength="45"
                            required><br>
                     <label for="nombre">Nombre</label>
@@ -25,13 +25,13 @@
 
                 <div>
                     <input type="text" style="width: 600px;" id="descripcion" name="descripcion"
-                           ng-model="sliderCtrl.oferta_01.descripcion"
+                           ng-model="sliderCtrl.slider_01.descripcion"
                            ng-maxlength="2000" required><br>
                     <label for="descripcion">Descripción</label>
                 </div>
 
-                <div>
-                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.oferta_01.precio" required/>
+                <div ng-if="sliderCtrl.conProductos">
+                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.slider_01.precio" required/>
                     <br>
                     <label for="precio_minorista">Precio</label>
                 </div>
@@ -40,10 +40,10 @@
             </div>
             <div class="line">
 
-                <div>
+                <div  ng-if="sliderCtrl.conProductos">
                     <ac-search-panel
-                            obj="sliderCtrl.oferta_01.producto[0]"
-                            obj-name="sliderCtrl.oferta_01.producto[0].nombre"
+                            obj="sliderCtrl.slider_01.producto[0]"
+                            obj-name="sliderCtrl.slider_01.producto[0].nombre"
                             nombref="cajasForm"
                             nombre="02"
                             nombre-visible="Producto"
@@ -59,7 +59,7 @@
                                data-dbinf-on-files-selected-slider="agregarImagen(selectedFileList, 1)"/>
                     </div>
 
-                    <div ng-bind="sliderCtrl.oferta_01.imagen"></div>
+                    <div ng-bind="sliderCtrl.slider_01.imagen"></div>
                 </div>
             </div>
 
@@ -73,7 +73,7 @@
         <div>
             <div class="form-flex">
                 <div>
-                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.oferta_02.titulo"
+                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.slider_02.titulo"
                            ng-maxlength="45"
                            required><br>
                     <label for="nombre">Nombre</label>
@@ -81,13 +81,13 @@
 
                 <div>
                     <input style="width: 600px;" type="text" id="descripcion" name="descripcion"
-                           ng-model="sliderCtrl.oferta_02.descripcion"
+                           ng-model="sliderCtrl.slider_02.descripcion"
                            ng-maxlength="2000" required><br>
                     <label for="descripcion">Descripción</label>
                 </div>
 
-                <div>
-                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.oferta_02.precio" required/>
+                <div ng-if="sliderCtrl.conProductos">
+                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.slider_02.precio" required/>
                     <br>
                     <label for="precio_minorista">Precio</label>
                 </div>
@@ -96,10 +96,10 @@
             </div>
             <div class="line">
 
-                <div>
+                <div ng-if="sliderCtrl.conProductos">
                     <ac-search-panel
-                            obj="sliderCtrl.oferta_02.producto[0]"
-                            obj-name="sliderCtrl.oferta_02.producto[0].nombre"
+                            obj="sliderCtrl.slider_02.producto[0]"
+                            obj-name="sliderCtrl.slider_02.producto[0].nombre"
                             nombref="cajasForm"
                             nombre="02"
                             nombre-visible="Producto"
@@ -115,7 +115,7 @@
                                data-dbinf-on-files-selected-slider="agregarImagen(selectedFileList, 2)"/>
                     </div>
 
-                    <div ng-bind="sliderCtrl.oferta_02.imagen"></div>
+                    <div ng-bind="sliderCtrl.slider_02.imagen"></div>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
         <div>
             <div class="form-flex">
                 <div>
-                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.oferta_03.titulo"
+                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.slider_03.titulo"
                            ng-maxlength="45"
                            required><br>
                     <label for="nombre">Nombre</label>
@@ -137,13 +137,13 @@
 
                 <div>
                     <input style="width: 600px;" type="text" id="descripcion" name="descripcion"
-                           ng-model="sliderCtrl.oferta_03.descripcion"
+                           ng-model="sliderCtrl.slider_03.descripcion"
                            ng-maxlength="2000" required><br>
                     <label for="descripcion">Descripción</label>
                 </div>
 
-                <div>
-                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.oferta_03.precio" required/>
+                <div ng-if="sliderCtrl.conProductos">
+                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.slider_03.precio" required/>
                     <br>
                     <label for="precio_minorista">Precio</label>
                 </div>
@@ -152,10 +152,10 @@
             </div>
             <div class="line">
 
-                <div>
+                <div ng-if="sliderCtrl.conProductos">
                     <ac-search-panel
-                            obj="sliderCtrl.oferta_03.producto[0]"
-                            obj-name="sliderCtrl.oferta_03.producto[0].nombre"
+                            obj="sliderCtrl.slider_03.producto[0]"
+                            obj-name="sliderCtrl.slider_03.producto[0].nombre"
                             nombref="cajasForm"
                             nombre="03"
                             nombre-visible="Producto"
@@ -171,7 +171,7 @@
                                data-dbinf-on-files-selected-slider="agregarImagen(selectedFileList, 3)"/>
                     </div>
 
-                    <div ng-bind="sliderCtrl.oferta_03.imagen"></div>
+                    <div ng-bind="sliderCtrl.slider_03.imagen"></div>
                 </div>
             </div>
 
@@ -185,7 +185,7 @@
         <div>
             <div class="form-flex">
                 <div>
-                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.oferta_04.titulo"
+                    <input type="text" id="nombre" name="nombre" ng-model="sliderCtrl.slider_04.titulo"
                            ng-maxlength="45"
                            required><br>
                     <label for="nombre">Nombre</label>
@@ -193,13 +193,13 @@
 
                 <div>
                     <input style="width: 600px;" type="text" id="descripcion" name="descripcion"
-                           ng-model="sliderCtrl.oferta_04.descripcion"
+                           ng-model="sliderCtrl.slider_04.descripcion"
                            ng-maxlength="2000" required><br>
                     <label for="descripcion">Descripción</label>
                 </div>
 
-                <div>
-                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.oferta_04.precio" required/>
+                <div ng-if="sliderCtrl.conProductos">
+                    <input id="precio_minorista" type="number" ng-model="sliderCtrl.slider_04.precio" required/>
                     <br>
                     <label for="precio_minorista">Precio</label>
                 </div>
@@ -208,10 +208,10 @@
             </div>
             <div class="line">
 
-                <div>
+                <div ng-if="sliderCtrl.conProductos">
                     <ac-search-panel
-                            obj="sliderCtrl.oferta_04.producto[0]"
-                            obj-name="sliderCtrl.oferta_04.producto[0].nombre"
+                            obj="sliderCtrl.slider_04.producto[0]"
+                            obj-name="sliderCtrl.slider_04.producto[0].nombre"
                             nombref="cajasForm"
                             nombre="04"
                             nombre-visible="Producto"
@@ -227,13 +227,13 @@
                                data-dbinf-on-files-selected-slider="agregarImagen(selectedFileList, 4)"/>
                     </div>
 
-                    <div ng-bind="sliderCtrl.oferta_04.imagen"></div>
+                    <div ng-bind="sliderCtrl.slider_04.imagen"></div>
                 </div>
             </div>
 
         </div>
     </div>
-    
+
     <div>
         <!--<input type="submit"-->
         <!--ng-disabled="productForm.user.$dirty && productForm.user.$invalid ||-->

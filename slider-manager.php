@@ -1,6 +1,6 @@
 <?php
 session_start();
-session_start();
+
 if (file_exists('./MyDBi.php')) {
     require_once 'MyDBi.php';
 } else {
@@ -20,7 +20,7 @@ if ($decoded != null) {
 } else {
 
     $function = $_GET["function"];
-    if ($function == 'getSlider') {
+    if ($function == 'getSliders') {
         getSlider($_GET["conProductos"]);
     }
 
@@ -35,7 +35,7 @@ function getSlider($conProductos)
 //    $results = $db->rawQuery('Select slider_id, o.producto_id producto_id, kit_id, precio, o.descripcion descripcion,
 //    imagen, titulo, p.nombre producto from sliders o inner join productos p on o.producto_id = p.producto_id;');
 
-    $results = $db->rawQuery('Select oferta_id, o.producto_id producto_id, kit_id, precio, o.descripcion descripcion,
+    $results = $db->rawQuery('Select oferta_id slider_id, o.producto_id producto_id, kit_id, precio, o.descripcion descripcion,
     imagen, titulo, 0 producto from ofertas o;');
 
     if ($conProductos) {
@@ -54,7 +54,7 @@ function saveSlider($slider)
     $db = new MysqliDb();
     $item_decoded = $slider;
 //    $fotos_decoded = json_decode($producto->fotos);
-    $db->where('slider_id', $item_decoded->slider_id);
+    $db->where('oferta_id', $item_decoded->slider_id);
     $data = array(
         'producto_id' => $item_decoded->producto_id,
         'precio' => $item_decoded->precio,
@@ -64,7 +64,7 @@ function saveSlider($slider)
     );
 
 
-    $results = $db->update('sliders', $data);
+    $results = $db->update('ofertas', $data);
 
 
     $res = ['status' => 1, 'results' => 0];

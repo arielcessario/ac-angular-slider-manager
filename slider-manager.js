@@ -127,7 +127,7 @@
 
 
                 };
-                ajax.open("POST", "./stock-api/upload.php");
+                ajax.open("POST", currentScriptPath.replace('slider-manager.js', "upload.php"));
                 ajax.send(form_data);
 
 
@@ -178,6 +178,7 @@
     function Slider(slidersService, toastr) {
         this.ctrl = function (scope, vm) {
 
+
             //var vm = this;
             scope.agregarImagen = agregarImagen;
             vm.producto_slider_01 = '';
@@ -189,7 +190,7 @@
             var foto_03 = {};
             var foto_04 = {};
 
-            vm.slider = [];
+            vm.sliders = [];
             vm.slider_01 = {
                 titulo: '',
                 descripcion: '',
@@ -228,10 +229,10 @@
 
 
             slidersService.getSliders(function (data) {
-                //data[0].precio = 0;
-                //data[1].precio = 0;
-                //data[2].precio = 0;
-                //data[3].precio = 0;
+                data[0].precio = 0;
+                data[1].precio = 0;
+                data[2].precio = 0;
+                data[3].precio = 0;
                 vm.slider_01 = data[0];
                 vm.slider_02 = data[1];
                 vm.slider_03 = data[2];
@@ -244,12 +245,12 @@
                 vm.slider_02.producto_id = -1;
                 vm.slider_03.producto_id = -1;
                 vm.slider_04.producto_id = -1;
-                vm.slider.push(vm.slider_01);
-                vm.slider.push(vm.slider_02);
-                vm.slider.push(vm.slider_03);
-                vm.slider.push(vm.slider_04);
+                vm.sliders.push(vm.slider_01);
+                vm.sliders.push(vm.slider_02);
+                vm.sliders.push(vm.slider_03);
+                vm.sliders.push(vm.slider_04);
 
-                slidersService.saveSlider(vm.slider, 'saveSlider', function (data) {
+                slidersService.saveSlider(vm.sliders, 'saveSlider', function (data) {
                     uploadImages(foto_01);
                     uploadImages(foto_02);
                     uploadImages(foto_03);
@@ -285,7 +286,7 @@
 
 
                 };
-                ajax.open("POST", "./stock-api/upload.php");
+                ajax.open("POST",currentScriptPath.replace('slider-manager.js', "upload.php") );
                 ajax.send(form_data);
 
 
@@ -341,10 +342,10 @@
             },
             templateUrl: currentScriptPath.replace('.js', '.html'),
             controller: function ($scope) {
-
                 var vm = this;
-                vm.conProductos = $scope.conProductos;
+                vm.conProductos = window.conProductos;
                 sliderSelector.ctrl($scope, vm);
+
 
             },
             link: function (scope) {
@@ -411,15 +412,16 @@
 
         }
 
-        function saveSlider(slider, _function, callback) {
+        function saveSlider(sliders, _function, callback) {
 
             return $http.post(url,
                 {
                     function: _function,
-                    slider: JSON.stringify(slider),
+                    sliders: JSON.stringify(sliders),
                     conProductos: JSON.stringify(window.conProductos)
                 })
                 .success(function (data) {
+                    console.log(data);
                     callback(data);
                 })
                 .error(function (data) {
