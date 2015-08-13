@@ -7,19 +7,18 @@
 
     angular.module('slider.manager', ['ngRoute', 'toastr'])
         .directive('sliderDirective', SliderDirective)
-        .factory('servicio', Servicio)
+        .factory('sliderSelector', SliderSelector)
+        .factory('slidersService', SlidersService)
         .service('sliderProductos', SliderProductos)
         .service('slider', Slider)
         .directive('dbinfOnFilesSelectedSliders', dbinfOnFilesSelectedSliders);
 
-    SliderProductos.$inject = ["$http", "$scope", "$routeParams", "SlidersService", "$location", "toastr",
-        'ProductosService'];
-    function SliderProductos($http, $scope, $routeParams, SlidersService, $location, toastr,
-                             ProductosService) {
-        this.ctrl = function () {
+    SliderProductos.$inject = ["slidersService", "toastr", 'ProductosService'];
+    function SliderProductos(slidersService, toastr, ProductosService) {
+        this.ctrl = function (scope) {
 
             var vm = this;
-            $scope.agregarImagen = agregarImagen;
+            scope.agregarImagen = agregarImagen;
             vm.producto_slider_01 = '';
             vm.save = save;
             //vm.searchProductoParaSlider = searchProductoParaSlider;
@@ -70,7 +69,7 @@
             };
 
 
-            SlidersService.getSliders(function (data) {
+            slidersService.getSliders(function (data) {
                 data[0].precio = parseFloat(data[0].precio);
                 data[1].precio = parseFloat(data[1].precio);
                 data[2].precio = parseFloat(data[2].precio);
@@ -92,7 +91,7 @@
                 vm.slider.push(vm.slider_03);
                 vm.slider.push(vm.slider_04);
 
-                SlidersService.saveSlider(vm.slider, 'saveSlider', function (data) {
+                slidersService.saveSlider(vm.slider, 'saveSlider', function (data) {
                     uploadImages(foto_01);
                     uploadImages(foto_02);
                     uploadImages(foto_03);
@@ -168,19 +167,19 @@
                 //    vm.slider.fotos.push(foto);
                 //    //console.log((vm.slider.fotos));
                 //}
-                $scope.$apply();
+                scope.$apply();
             }
 
 
         }
     }
 
-    Slider.$inject = ["$http", "$scope", "$routeParams", "SlidersService", "$location", "toastr"];
-    function Slider($http, $scope, $routeParams, SlidersService, $location, toastr) {
-        this.ctrl = function () {
+    Slider.$inject = ["slidersService", "toastr"];
+    function Slider(slidersService, toastr) {
+        this.ctrl = function (scope) {
 
             var vm = this;
-            $scope.agregarImagen = agregarImagen;
+            scope.agregarImagen = agregarImagen;
             vm.producto_slider_01 = '';
             vm.save = save;
             vm.lista_slider_01 = [];
@@ -228,11 +227,11 @@
             };
 
 
-            SlidersService.getSliders(function (data) {
-                data[0].precio = parseFloat(data[0].precio);
-                data[1].precio = parseFloat(data[1].precio);
-                data[2].precio = parseFloat(data[2].precio);
-                data[3].precio = parseFloat(data[3].precio);
+            slidersService.getSliders(function (data) {
+                //data[0].precio = 0;
+                //data[1].precio = 0;
+                //data[2].precio = 0;
+                //data[3].precio = 0;
                 vm.slider_01 = data[0];
                 vm.slider_02 = data[1];
                 vm.slider_03 = data[2];
@@ -250,7 +249,7 @@
                 vm.slider.push(vm.slider_03);
                 vm.slider.push(vm.slider_04);
 
-                SlidersService.saveSlider(vm.slider, 'saveSlider', function (data) {
+                slidersService.saveSlider(vm.slider, 'saveSlider', function (data) {
                     uploadImages(foto_01);
                     uploadImages(foto_02);
                     uploadImages(foto_03);
@@ -326,27 +325,31 @@
                 //    vm.slider.fotos.push(foto);
                 //    //console.log((vm.slider.fotos));
                 //}
-                $scope.$apply();
+                scope.$apply();
             }
 
 
         }
     }
 
-
-    SliderDirective.$inject = ['$location', '$route', 'servicio'];
-    function SliderDirective($location, $route, servicio) {
+    SliderDirective.$inject = ['sliderSelector', 'slidersService'];
+    function SliderDirective(sliderSelector, slidersService) {
         return {
             restrict: 'E',
             scope: {
                 conProductos: '='
             },
             templateUrl: currentScriptPath.replace('.js', '.html'),
-            controller: function ($scope, $compile, $http, servicio) {
+            controller: function ($scope) {
 
                 var vm = this;
 
-                servicio.ctrl();
+
+                sliderSelector.ctrl($scope);
+
+            },
+            link: function (scope) {
+                console.log('entra');
 
 
             },
@@ -424,113 +427,20 @@
 
     }
 
+    SliderSelector.$inject = ['$injector', '$http'];
+    function SliderSelector($injector, $http) {
 
-    Servicio.$inject = ['$injector', '$scope'];
-    function Servicio($injector, $scope) {
 
-
-        if ($scope.conProductos) {
-            return $injector.get('sliderProductos');
-        } else {
-            return $injector.get('slider');
-        }
+        var resultado = function () {
+            if (window.conProductos) {
+                return $injector.get('sliderProductos');
+            } else {
+                return $injector.get('slider');
+            }
+        };
+        return resultado();
 
     }
 
 })();
-
-
-//
-//(function () {
-//
-//
-//
-//    angular.module('slider.manager', ['ngRoute', 'toastr'])
-//
-//        .config(['$routeProvider', function ($routeProvider) {
-//            $routeProvider.when('/slider', {
-//                templateUrl: currentScriptPath.replace('.js', '.html'),
-//                controller: 'SlidersController'
-//            });
-//        }])
-//
-//        .controller('SlidersController', SlidersController)
-//        .service('SlidersService', SlidersService)
-//        .directive('dbinfOnFilesSelectedSliders', dbinfOnFilesSelectedSliders);
-//
-//    SlidersController.$inject = ["$http", "$scope", "$routeParams", "SlidersService", "$location", "toastr",
-//    'ProductosService'];
-//    function SlidersController($http, $scope, $routeParams, SlidersService, $location, toastr,
-//                               ProductosService) {
-//
-//    }
-//
-//    function dbinfOnFilesSelectedSliders() {
-//        return {
-//            restrict: 'A',
-//            scope: {
-//                //attribute data-dbinf-on-files-selected (normalized to dbinfOnFilesSelected) identifies the action
-//                //to take when file(s) are selected. The '&' says to  execute the expression for attribute
-//                //data-dbinf-on-files-selected in the context of the parent scope. Note though that this '&'
-//                //concerns visibility of the properties and functions of the parent scope, it does not
-//                //fire the parent scope's $digest (dirty checking): use $scope.$apply() to update views
-//                //(calling scope.$apply() here in the directive had no visible effect for me).
-//                dbinfOnFilesSelectedSliders: '&'
-//            },
-//            link: function (scope, element, attr, Controller) {
-//                element.bind("change", function () {  //match the selected files to the name 'selectedFileList', and
-//                    //execute the code in the data-dbinf-on-files-selected attribute
-//                    scope.dbinfOnFilesSelectedSliders({selectedFileList: element[0].files});
-//                });
-//            }
-//        }
-//    }
-//
-//    SlidersService.$inject = ['$http', '$cacheFactory'];
-//    function SlidersService($http, $cacheFactory) {
-//        var service = {};
-//        var sucursal_id = 1;
-//        var clearCache = false;
-//
-//        service.getSliders = getSliders;
-//        service.saveSlider = saveSlider;
-//
-//        return service;
-//
-//        function getSliders(callback) {
-//            var $httpDefaultCache = $cacheFactory.get('$http');
-//            var cachedData = [];
-//            if (clearCache) {
-//                $httpDefaultCache.remove('./stock-api/slider-manager.php?function=getSliders');
-//
-//
-//            }
-//
-//
-//            return $http.get('./stock-api/slider-manager.php?function=getSliders', {cache: false})
-//                .success(function (data) {
-//                    callback(data);
-//                    clearCache = false;
-//                })
-//                .error(function(data){
-//
-//                });
-//
-//
-//        }
-//
-//        function saveSlider(slider, _function, callback) {
-//
-//            return $http.post('./stock-api/slider-manager.php',
-//                {function: _function, slider: JSON.stringify(slider)})
-//                .success(function (data) {
-//                    callback(data);
-//                    clearCache = true;
-//                })
-//                .error(function(data){});
-//        }
-//
-//    }
-//
-//})();
 
