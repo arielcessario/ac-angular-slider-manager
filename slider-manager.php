@@ -1,10 +1,9 @@
 <?php
 session_start();
 session_start();
-if(file_exists('./MyDBi.php'))
-{
+if (file_exists('./MyDBi.php')) {
     require_once 'MyDBi.php';
-}else{
+} else {
     require_once '../../MyDBi.php';
 }
 
@@ -12,49 +11,50 @@ $data = file_get_contents("php://input");
 
 $decoded = json_decode($data);
 if ($decoded != null) {
-    if ($decoded->function == 'saveOferta') {
-        foreach(json_decode($decoded->ofertas) as $oferta){
-//            $of = $oferta;
-            saveOferta($oferta);
+    if ($decoded->function == 'saveSlider') {
+        foreach (json_decode($decoded->sliders) as $slider) {
+//            $of = $slider;
+            saveSlider($slider);
         }
     }
 } else {
 
     $function = $_GET["function"];
-    if ($function == 'getOfertas') {
-        getOfertas();
+    if ($function == 'getSlider') {
+        getSlider($_GET["conProductos"]);
     }
 
 }
 
 
-function getOfertas()
+function getSlider($conProductos)
 {
     $db = new MysqliDb();
 
-//    $results = $db->get('ofertas');
-//    $results = $db->rawQuery('Select oferta_id, o.producto_id producto_id, kit_id, precio, o.descripcion descripcion,
-//    imagen, titulo, p.nombre producto from ofertas o inner join productos p on o.producto_id = p.producto_id;');
+//    $results = $db->get('sliders');
+//    $results = $db->rawQuery('Select slider_id, o.producto_id producto_id, kit_id, precio, o.descripcion descripcion,
+//    imagen, titulo, p.nombre producto from sliders o inner join productos p on o.producto_id = p.producto_id;');
 
     $results = $db->rawQuery('Select oferta_id, o.producto_id producto_id, kit_id, precio, o.descripcion descripcion,
     imagen, titulo, 0 producto from ofertas o;');
 
-    foreach($results as $key => $row){
-        $db->where('producto_id', $row["producto_id"]);
-        $producto = $db->get('productos');
-        $results[$key]["producto"] = $producto;
+    if ($conProductos) {
+        foreach ($results as $key => $row) {
+            $db->where('producto_id', $row["producto_id"]);
+            $producto = $db->get('productos');
+            $results[$key]["producto"] = $producto;
+        }
     }
-
 
     echo json_encode($results);
 }
 
-function saveOferta($oferta)
+function saveSlider($slider)
 {
     $db = new MysqliDb();
-    $item_decoded = $oferta;
+    $item_decoded = $slider;
 //    $fotos_decoded = json_decode($producto->fotos);
-    $db->where('oferta_id', $item_decoded->oferta_id);
+    $db->where('slider_id', $item_decoded->slider_id);
     $data = array(
         'producto_id' => $item_decoded->producto_id,
         'precio' => $item_decoded->precio,
@@ -64,7 +64,7 @@ function saveOferta($oferta)
     );
 
 
-    $results = $db->update('ofertas', $data);
+    $results = $db->update('sliders', $data);
 
 
     $res = ['status' => 1, 'results' => 0];

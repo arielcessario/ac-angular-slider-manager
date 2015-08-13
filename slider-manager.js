@@ -15,9 +15,9 @@
 
     SliderProductos.$inject = ["slidersService", "toastr", 'ProductosService'];
     function SliderProductos(slidersService, toastr, ProductosService) {
-        this.ctrl = function (scope) {
+        this.ctrl = function (scope, vm) {
 
-            var vm = this;
+            //var vm = this;
             scope.agregarImagen = agregarImagen;
             vm.producto_slider_01 = '';
             vm.save = save;
@@ -176,9 +176,9 @@
 
     Slider.$inject = ["slidersService", "toastr"];
     function Slider(slidersService, toastr) {
-        this.ctrl = function (scope) {
+        this.ctrl = function (scope, vm) {
 
-            var vm = this;
+            //var vm = this;
             scope.agregarImagen = agregarImagen;
             vm.producto_slider_01 = '';
             vm.save = save;
@@ -344,7 +344,7 @@
 
                 var vm = this;
                 vm.conProductos = $scope.conProductos;
-                sliderSelector.ctrl($scope);
+                sliderSelector.ctrl($scope, vm);
 
             },
             link: function (scope) {
@@ -393,17 +393,16 @@
         function getSliders(callback) {
             var $httpDefaultCache = $cacheFactory.get('$http');
             var cachedData = [];
-            if (clearCache) {
-                $httpDefaultCache.remove(url + '?function=getSliders');
+            //if (clearCache) {
+            //    $httpDefaultCache.remove(url + '?function=getSliders');
+            //
+            //
+            //}
 
 
-            }
-
-
-            return $http.get(url + '?function=getSliders', {cache: false})
+            return $http.get(url + '?function=getSliders&conProductos=' + window.conProductos, {cache: false})
                 .success(function (data) {
                     callback(data);
-                    clearCache = false;
                 })
                 .error(function (data) {
 
@@ -415,10 +414,13 @@
         function saveSlider(slider, _function, callback) {
 
             return $http.post(url,
-                {function: _function, slider: JSON.stringify(slider)})
+                {
+                    function: _function,
+                    slider: JSON.stringify(slider),
+                    conProductos: JSON.stringify(window.conProductos)
+                })
                 .success(function (data) {
                     callback(data);
-                    clearCache = true;
                 })
                 .error(function (data) {
                 });
