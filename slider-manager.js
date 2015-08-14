@@ -70,6 +70,7 @@
 
 
             slidersService.getSliders(function (data) {
+                console.log(data);
                 data[0].precio = parseFloat(data[0].precio);
                 data[1].precio = parseFloat(data[1].precio);
                 data[2].precio = parseFloat(data[2].precio);
@@ -286,7 +287,7 @@
 
 
                 };
-                ajax.open("POST",currentScriptPath.replace('slider-manager.js', "upload.php") );
+                ajax.open("POST", currentScriptPath.replace('slider-manager.js', "upload.php"));
                 ajax.send(form_data);
 
 
@@ -344,14 +345,14 @@
             controller: function ($scope) {
                 var vm = this;
                 vm.conProductos = window.conProductos;
+
+
                 sliderSelector.ctrl($scope, vm);
-
-
             },
             link: function (scope) {
+
+
                 //conProductos = scope.conProductos;
-
-
             },
 
             controllerAs: 'sliderCtrl'
